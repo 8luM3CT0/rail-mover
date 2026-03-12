@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .forMobile {
+    @apply lg:hidden
+        flex
+        flex-col
+        items-start
+        
+  }
+
+  .mobileDisplay {
+    @apply 
+        hidden
+        lg:flex
+        flex-col
+        items-start
+        justify-between
+        ;
+  }
+  
+  .mainHeaderBlankDiv{
+    @apply
+    h-full
+    w-[7.5%]
+    md:w-[15%]
+    lg:w-[22.5%]
+  }
+
+  .mainHeaderCenterDiv{
+    @apply
+    h-full
+    w-[85%]
+    md:w-[70%]
+    lg:w-[55%]
+    flex
+    flex-col
+    items-center
+  }
+
+  .mainHeaderBlankDivY{
+    @apply
+    w-full
+    h-[2.5%]
+    md:h-[5%]
+    lg:h-[10%]
+  }
+  
+  .mainHeaderCenter{
+    @apply
+    w-full
+    h-[95%]
+    md:w-[90%]
+    lg:h-[80%]
+  }
+
+}

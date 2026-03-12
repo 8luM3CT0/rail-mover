@@ -1,0 +1,561 @@
+/*  const submitWord = async e => {
+    e.preventDefault()
+    await fetch('/api/words', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        word,
+        pronounciation,
+        type,
+        meaning,
+        email: user?.email,
+        displayName: user?.displayName
+      })
+    })
+      .then(res => res.text())
+      .then(text => console.log(text))
+    console.log('The response JSON from the body >>>>>>>', data)
+    setWord('')
+    setPronounciation('')
+    setType('')
+    setMeaning('')
+    setAddWord(false)
+  }
+*/
+
+{/**HomeFeed End */}
+          <div className='grid place-items-center space-y-5 pb-24'>
+            <h2 className='text-xl text-red-500 font-google-sans font-normal'>
+              Or, add something to the databanks
+            </h2>
+            <Button
+              onClick={e => setAddWord(true)}
+              disabled={user?.displayName !== 'Reaper IFF'}
+              color='blue'
+              buttonType='filled'
+              size='regular'
+              rounded={false}
+              iconOnly={false}
+              block={false}
+              ripple='dark'
+            >
+              <Icon name='add' />
+              <h2 className='text-lg capitalize font-robot-slab font-semibold'>
+                Add something
+              </h2>
+            </Button>
+          </div>*/}
+
+            <Modal active={addWord} size='lg' toggler={() => setAddWord(false)}>
+        <ModalHeader toggler={() => setAddWord(false)}>
+          <h2
+            className='
+        font-google-sans 
+        font-semibold 
+        text-lg 
+        text-gray-900
+         animate-pulse'
+          >
+            Add a new word / 添加一个新词
+          </h2>
+        </ModalHeader>
+        <ModalBody>
+          <div className='grid space-y-5 p-20'>
+            <h2 className='text-xl font-semibold text-gray-800'>Word / 字</h2>
+            <Input
+              type='text'
+              color='blueGray'
+              size='lg'
+              outline={false}
+              placeholder='Type something...'
+              className='mx-auto'
+              value={word}
+              onChange={e => setWord(e.target.value)}
+            />
+            <h2 className='text-xl font-semibold text-gray-800'>
+              Pronounciation / 发音
+            </h2>
+            <Input
+              type='text'
+              color='blueGray'
+              size='lg'
+              outline={false}
+              placeholder='Pronounciation: '
+              className='mx-auto'
+              value={pronounciation}
+              onChange={e => setPronounciation(e.target.value)}
+            />
+            <h2 className='text-xl font-semibold text-gray-800'>Type / 类</h2>
+            <Input
+              type='text'
+              color='blueGray'
+              size='lg'
+              outline={false}
+              placeholder='Type of word: '
+              className='mx-auto'
+              value={type}
+              onChange={e => setType(e.target.value)}
+            />
+            <h2 className='text-xl font-semibold text-gray-800'>
+              Meaning / 含义
+            </h2>
+            <textarea
+              name='meaning'
+              type='text'
+              placeholder='Type of word: '
+              className='
+              mx-auto 
+              rounded-lg
+              max-w-[210px] 
+              max-h-[205px] 
+              bg-transparent 
+              outline-none 
+              border-2
+              p-3 
+              border-gray-300
+              text-gray-800
+              font-normal
+              font-google-sans
+              text-xl
+              overflow-y-scroll
+              scrollbar-hide
+              '
+              value={meaning}
+              onChange={e => setMeaning(e.target.value)}
+            />
+            <Button type='submit' color='green' ripple='light'>
+              Add
+            </Button>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color='red'
+            buttonType='link'
+            onClick={e => setAddWord(false)}
+            ripple='dark'
+          >
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/*Search code function*/}
+        const searchData = pattern => {
+    if (!pattern) {
+      setData(sample_word)
+      return
+    }
+
+    const fuse = new Fuse(data, {
+      keys: ['word', 'wordType', 'meaning', 'pronounce', 'name']
+    })
+    const result = fuse.search(pattern)
+    const matches = []
+    if (!result.length) {
+      setData([])
+    } else {
+      result.forEach(({ item }) => {
+        matches.push(item)
+      })
+      setData(matches)
+    }
+  }
+
+{/*Word search functions*/}
+useEffect(() => {
+    const fetchData = async() => {
+      const storeData = await store.collection('words').orderBy('word').get()
+     setData(storeData.docs.map(doc => ({...doc.data(), id: doc.id}))) 
+    }
+    fetchData()
+  }, [])
+
+    //delete data from the firestore
+  const deleteWord = id => {
+    store
+      .collection('words')
+      .doc(id)
+      .delete()
+  }
+
+  //update data from firestore
+  const updateWord = e => {
+    e.preventDefault()
+  }
+
+  {/*User condition for word feed*/}
+
+  {(user?.displayName === 'Reaper IFF' ||
+          user?.displayName === 'John Seed' ||
+          user?.email === 'marvin_sy@dlsu.edu.ph' ||
+          user?.displayName === 'Elrae Sheppard') && (
+          <div
+            className='
+              flex 
+              items-center 
+              w-full 
+              justify-evenly 
+              space-x-4
+              my-4
+              p-3
+              rounded-lg
+              bg-slate-100
+              '
+          >
+            <Button
+              onClick={e => setAddSentence(true)}
+              color='green'
+              buttonType='filled'
+              size='regular'
+              block={false}
+              rounded={false}
+              iconOnly={false}
+              ripple='light'
+              className='space-x-3 capitalize'
+            >
+              <Icon name='add_box' />
+              <h1 className='font-google-sans font-normal mobileDisplay'>
+                Add sample sentence
+              </h1>
+            </Button>
+            <Button
+              onClick={e => setUpdate(true)}
+              color='lightBlue'
+              buttonType='filled'
+              size='regular'
+              block={false}
+              rounded={false}
+              iconOnly={false}
+              ripple='light'
+              className='space-x-3 capitalize'
+            >
+              <Icon name='upgrade' />
+              <h1 className='font-google-sans font-normal mobileDisplay'>
+                Update
+              </h1>
+            </Button>
+            <Button
+              onClick={e => setDeleteOption(true)}
+              color='red'
+              buttonType='filled'
+              size='regular'
+              block={false}
+              rounded={false}
+              iconOnly={false}
+              ripple='light'
+              className='space-x-3 capitalize'
+            >
+              <Icon name='clear_all' />
+              <h1 className='font-google-sans font-normal mobileDisplay'>
+                Delete
+              </h1>
+            </Button>
+          </div>
+        )}
+
+{/*Code for wordfeed; sample sentence display*/}
+          {sampleSnapshot &&
+            sampleSnapshot?.docs.map(doc => (
+              <div
+          className='
+        w-full
+        lg:h-[530px]
+        md:h-[510px]
+        h-[490px]
+        py-3
+        overflow-y-scroll
+        scrollbar-thin
+        scrollbar-track-sky-300
+        scrollbar-thumb-slate-700
+        bg-slate-200
+        '
+        >
+            <Sentence
+                editor={doc?.data()?.editor}
+                pic={doc?.data()?.editorPic}
+                sample={doc?.data()?.sample}
+              />
+        </div>
+            ))}
+{/*Code for snapshot  display (comments)*/}
+          {commentsSnapshot &&
+            commentsSnapshot?.docs.map(doc => (
+              <Comment
+                comment={doc?.data()?.comment}
+                email={doc?.data()?.commentEmail}
+                name={doc?.data()?.commentUser}
+                pic={doc?.data()?.profPic}
+                timestamp={doc?.data()?.timestamp}
+              />
+            ))}
+
+//return the comments from the database
+  const [commentsSnapshot] = useCollection(
+    store
+      .collection('words')
+      .doc(router.query.id)
+      .collection('comments')
+  )
+
+  //for Comment.js (user details)
+  <img
+            src={pic}
+            alt=''
+            className='
+          h-12
+          w-12
+          rounded-3xl
+          border
+          border-sky-200
+          '
+          />
+          <span
+            className='
+          mobileDisplay
+          flex-col
+          place-items-start 
+          space-y-3
+          font-robot-slab
+          '
+          >
+            <h2 className='text-xl text-sky-500 font-semibold'>{name}</h2>
+            <h5 className='text-lg text-sky-200 font-light'>{email}</h5>
+          </span>
+      
+
+  //for Comment.js (comment itself)
+        <p
+        className='
+      text-base 
+      font-semibold 
+      text-sky-50 
+      lg:w-full 
+      md:w-[420px] 
+      w-[290px]
+      justify-self-center
+      '
+      >
+        {comment}
+      </p>
+
+  //for authorized Users
+  //front-end
+import React from 'react'
+import {Button, Icon} from '../components/'
+//back-end
+import {useState} from 'react'
+import {useAuthState} from 'react-firebase-hooks/auth'
+import {useCollection} from 'react-firebase-hooks/firestore'
+import {creds, store, provider} from '../backend_services/firebase'
+
+function Authorized() {
+  return (
+    <div className='h-screen overflow-hidden'></div>
+  )
+}
+
+export default Authorized
+
+//function for adding audio to both the Firestore database and the storage
+  const handleAudio = e => {
+    const reader = new FileReader()
+    if (e.target.value[0]) {
+      reader.readAsDataURL(e.target.files[0])
+    }
+    reader.onload = reEvent => {
+      setAudio(reEvent.target.result)
+    }
+    setAddAudio(false)
+  }
+
+  useEffect(() => {
+    store
+      .collection('words')
+      .doc(router.query.id)
+      .collection('audio_sample')
+      .add({
+        sampleAudio: audio,
+        audioAdder: user?.displayName,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+  }, [])
+
+
+const deleteComment = e => {
+    e.preventDefault()
+
+    store
+      .collection('words')
+      .doc(router.query.id)
+      .collection('comments')
+      .doc(router.query.id)
+      .delete()
+
+    setDeleteComm(false)
+  }
+
+<Modal
+        size='regular'
+        active={deleteComm}
+        toggler={() => setDeleteComm(false)}
+      >
+        <ModalHeader toggler={() => setDeleteComm(false)}>
+          <h5 className='text-lg font-robot-slab font-semibold text-sky-500'>
+            Delete comment of the user
+          </h5>
+        </ModalHeader>
+        <ModalBody>
+          <div className='px-16 py-14 grid place-items-start space-y-4'>
+            <h1 className='text-lg font-google-sans font-normal text-blue-400 w-[290px]'>
+              Are you sure you want to delete ? The action cannot be reversed.
+            </h1>
+            <Button
+              onClick={deleteComment}
+              color='red'
+              buttonType='filled'
+              size='lg'
+              ripple='light'
+              className='capitalize font-google-sans font-normal'
+            >
+              Delete
+            </Button>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            onClick={e => setDeleteComm(false)}
+            color='blue'
+            size='regular'
+            buttonType='link'
+            ripple='dark'
+            className='font-robot-slab font-normal'
+          >
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+
+      //store useCollection
+      if (audioSample) {
+      const storageRef = storage
+        .ref('words')
+        .child(router.query.id)
+        .child(`${router.query.id}.wav`)
+
+      await storageRef.put(audioSample)
+
+      audioURL = await storageRef.getDownloadURL()
+    }
+
+    await store
+      .collection('words')
+      .doc(router.query.id)
+      .set(
+        {
+          audioSample: audioURL
+        },
+        {
+          merge: true
+        }
+      )
+    setAddAudio(false)
+
+    //other audio snapshot code
+    {audioSnapshot ? (
+                  audioSnapshot?.docs.map(doc => (
+                    <WordPronounciation
+                      key={doc?.id}
+                      id={doc?.id}
+                      audioSample={doc?.data()?.audioSample}
+                    />
+                  ))
+                ) : (
+                  <Button
+                    onClick={e => setAddAudio(true)}
+                    color='blue'
+                    buttonType='filled'
+                    size='sm'
+                    iconOnly={false}
+                    block={false}
+                    rounded={false}
+                    ripple='dark'
+                    className='capitalize font-robot-slab font-semibold text-base'
+                  >
+                    <Icon name='music_note' />
+                    Add audio
+                  </Button>
+                )}
+
+
+
+                 
+                   <Button
+                    onClick={e => setAddAudio(true)}
+                    color='blue'
+                    buttonType='filled'
+                    size='sm'
+                    iconOnly={false}
+                    block={false}
+                    rounded={false}
+                    ripple='dark'
+                    className='capitalize font-robot-slab font-semibold text-base'
+                  >
+                    <Icon name='music_note' />
+                    Add audio
+                  </Button>
+
+
+                    audioSnapshot?.docs.map(doc => (
+                    <WordPronounciation
+                      key={doc?.id}
+                      id={doc?.id}
+                      audioSample={doc?.data()?.audioSample}
+                    />
+
+
+                    (
+                  audioSnapshot?.docs.map(doc => (
+                    <WordPronounciation
+                      key={doc?.id}
+                      id={doc?.id}
+                      audioSample={doc?.data()?.audioSample}
+                    />
+                  ))
+                )
+
+/*For deleting the audio*/
+        {/*(user?.displayName === 'Reaper IFF' ||
+          user?.displayName === 'John Seed' ||
+          user?.email === 'marvin_sy@dlsu.edu.ph') && (
+          <Button
+            onClick={deleteAudio}
+            color='red'
+            buttonType='link'
+            size='sm'
+            ripple='light'
+            className='text-sm font-robot-slab font-normal capitalize'
+          >
+            <Icon name='delete' />
+            Delete
+          </Button>
+        )*/}
+
+/*code for index*/
+searchClient={{
+              ...searchClient,
+              search(requests){
+                const updatedReqs = requests.map(req => ({
+                  ...req,
+                  params: {
+                    ...req?.params,
+                    attributesToRetrieve: dynAtt
+                  }
+                }));
+                return searchClient.search(updatedReqs)
+              }
+            }}
+            onSearchStateChange={({query = '' }) => setGenQuery(query)}

@@ -1,0 +1,72 @@
+Assuming you have a Next.js project set up, you can create a component that performs the integration as follows:
+
+import React, { useEffect } from 'react';
+import { useDocument } from 'react-firebase-hooks/firestore';
+import { Client } from 'instant-meilisearch';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+const config = {
+  // Firebase configuration
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}
+
+const firestore = firebase.firestore();
+
+// Initialize Instant Meilisearch
+const instantMeilisearchClient = new Client({
+  host: 'INSTANT_MEILISEARCH_HOST',
+  apiKey: 'INSTANT_MEILISEARCH_API_KEY'
+});
+
+const ExampleComponent = () => {
+  const docId = 'your_document_id';
+
+  // Retrieve document from Firestore using react-firebase-hooks
+  const [snapshot, loading, error] = useDocument(firestore.doc(`your_collection/${docId}`));
+  const firestoreDocument = snapshot?.data();
+
+  useEffect(() => {
+    const updateFirestoreWithInstantMeilisearchResult = async () => {
+      try {
+        // Perform search in Instant Meilisearch
+        const searchResult = await instantMeilisearchClient.search('your_search_query');
+
+        // Extract data from Instant Meilisearch result
+        const instantMeilisearchData = searchResult.hits[0]; // Assuming you want to update with the first result
+        const updatedData = {
+          field1: instantMeilisearchData.field1, // Update field1 with Instant Meilisearch data
+          field2: instantMeilisearchData.field2 // Update field2 with Instant Meilisearch data
+          // Add more fields as needed
+        };
+
+        // Update Firestore document with Instant Meilisearch data
+        await firestore.doc(`your_collection/${docId}`).update(updatedData);
+
+        console.log('Firestore document updated successfully.');
+      } catch (error) {
+        console.error('Error updating Firestore document:', error);
+      }
+    };
+
+    if (firestoreDocument) {
+      // Call the update function when the Firestore document is available
+      updateFirestoreWithInstantMeilisearchResult();
+    }
+  }, [firestoreDocument]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return <div>Firestore document updated successfully!</div>;
+};
+
+export default ExampleComponent;
